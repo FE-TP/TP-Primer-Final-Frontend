@@ -1,0 +1,107 @@
+<div class="container mx-auto p-6">
+  <div class="card">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">🗺️ Zonas</h2>
+        <p class="text-sm text-gray-600 mt-1">Gestión de zonas y horarios</p>
+      </div>
+      <button mat-raised-button class="btn-primary" (click)="openCreateDialog()">
+        <mat-icon>add</mat-icon>
+        Nueva Zona
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto" *ngIf="zones.length > 0">
+      <table mat-table [dataSource]="zones" class="w-full">
+        <!-- Nombre Column -->
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700">Nombre</th>
+          <td mat-cell *matCellDef="let zone" class="text-gray-800">
+            {{ zone.nombre }}
+          </td>
+        </ng-container>
+
+        <!-- Restaurante Column -->
+        <ng-container matColumnDef="restaurante">
+          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700">Restaurante</th>
+          <td mat-cell *matCellDef="let zone">
+            <span class="text-gray-600">{{ getRestaurantName(zone.restauranteId) }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Horarios Column -->
+        <ng-container matColumnDef="horarios">
+          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700">Horarios</th>
+          <td mat-cell *matCellDef="let zone">
+            <div class="flex flex-wrap gap-1">
+              <span *ngFor="let horario of zone.horariosDisponibles" class="inline-block px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-xs font-medium">
+                {{ horario }}
+              </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Estado Column -->
+        <ng-container matColumnDef="activo">
+          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700">Estado</th>
+          <td mat-cell *matCellDef="let zone">
+            <span [class]="zone.activo ? 'badge-success' : 'badge-error'">
+              <mat-icon class="icon-sm">{{ zone.activo ? 'check_circle' : 'cancel' }}</mat-icon>
+              {{ zone.activo ? 'Activa' : 'Inactiva' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Mesas Column -->
+        <ng-container matColumnDef="mesas">
+          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700">Mesas</th>
+          <td mat-cell *matCellDef="let zone">
+            <span class="badge-info">
+              {{ getTableCount(zone.id) }} mesas
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Acciones Column -->
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700">Acciones</th>
+          <td mat-cell *matCellDef="let zone">
+            <div class="flex items-center gap-2">
+              <button
+                mat-icon-button
+                (click)="openEditDialog(zone)"
+                matTooltip="Editar"
+                class="action-btn action-btn-edit"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                (click)="toggleActive(zone)"
+                [matTooltip]="zone.activo ? 'Desactivar' : 'Activar'"
+                [class]="zone.activo ? 'action-btn action-btn-disable' : 'action-btn action-btn-enable'"
+              >
+                <mat-icon>{{ zone.activo ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50"></tr>
+      </table>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="zones.length === 0" class="text-center py-12">
+      <mat-icon class="text-gray-300 text-6xl mb-4">map</mat-icon>
+      <p class="text-gray-500">No hay zonas registradas</p>
+      <button mat-raised-button class="btn-primary mt-4" (click)="openCreateDialog()">
+        <mat-icon>add</mat-icon>
+        Crear la primera zona
+      </button>
+    </div>
+  </div>
+</div>

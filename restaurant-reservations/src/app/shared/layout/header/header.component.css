@@ -1,0 +1,35 @@
+.header {
+  @apply bg-white border-b border-gray-200 shadow-sm;
+}
+
+.header-content {
+  @apply flex items-center justify-between w-full px-6 h-16;
+}
+
+.header-left {
+  @apply flex items-center gap-3;
+}
+
+.logo-icon {
+  @apply text-3xl;
+}
+
+.logo-title {
+  @apply text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent;
+}
+
+.header-right {
+  @apply flex items-center gap-4;
+}
+
+.date-display {
+  @apply flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-lg;
+}
+
+.user-button {
+  @apply transition-colors duration-200;
+}
+
+.user-button:hover {
+  @apply bg-blue-50 text-blue-600;
+}

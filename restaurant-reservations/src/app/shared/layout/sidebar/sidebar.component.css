@@ -1,0 +1,44 @@
+.sidebar {
+  @apply w-64 bg-white border-r border-gray-200 min-h-screen flex flex-col;
+}
+
+.sidebar-header {
+  @apply p-6 border-b border-gray-100;
+}
+
+.sidebar-nav {
+  @apply flex flex-col py-4;
+}
+
+.nav-item {
+  @apply flex items-center px-6 py-3 text-gray-700 transition-all duration-200 cursor-pointer relative;
+  @apply hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50;
+}
+
+.nav-item .emoji {
+  @apply text-2xl mr-3 transition-transform duration-200;
+}
+
+.nav-item .label {
+  @apply text-sm font-medium;
+}
+
+.nav-item .indicator {
+  @apply absolute left-0 w-1 h-0 bg-gradient-to-b from-blue-600 to-indigo-600 transition-all duration-200;
+}
+
+.nav-item:hover .emoji {
+  @apply scale-110;
+}
+
+.nav-item.active {
+  @apply bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 font-semibold;
+}
+
+.nav-item.active .indicator {
+  @apply h-full;
+}
+
+.nav-item.active .emoji {
+  @apply scale-110;
+}

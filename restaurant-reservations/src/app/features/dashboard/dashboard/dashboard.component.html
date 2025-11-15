@@ -1,0 +1,95 @@
+<div class="container mx-auto p-6">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+      📊 Dashboard
+    </h1>
+    <p class="text-gray-600 mt-2">Vista general del sistema de reservas</p>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Total Restaurantes -->
+    <div class="card hover:shadow-lg transition-shadow duration-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-medium">Restaurantes</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2">{{ totalRestaurants }}</p>
+        </div>
+        <div class="bg-gradient-to-br from-blue-100 to-blue-200 p-4 rounded-xl">
+          <span class="text-3xl">🍽️</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Zonas -->
+    <div class="card hover:shadow-lg transition-shadow duration-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-medium">Zonas</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2">{{ totalZonas }}</p>
+        </div>
+        <div class="bg-gradient-to-br from-green-100 to-green-200 p-4 rounded-xl">
+          <span class="text-3xl">🗺️</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Mesas -->
+    <div class="card hover:shadow-lg transition-shadow duration-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-medium">Mesas</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2">{{ totalMesas }}</p>
+        </div>
+        <div class="bg-gradient-to-br from-purple-100 to-purple-200 p-4 rounded-xl">
+          <span class="text-3xl">🪑</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reservas Activas -->
+    <div class="card hover:shadow-lg transition-shadow duration-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-600 text-sm font-medium">Reservas Activas</p>
+          <p class="text-3xl font-bold text-gray-900 mt-2">{{ totalReservas }}</p>
+        </div>
+        <div class="bg-gradient-to-br from-orange-100 to-orange-200 p-4 rounded-xl">
+          <span class="text-3xl">📅</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Acciones rápidas -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="card">
+      <h2 class="text-xl font-bold text-gray-800 mb-6">⚡ Acciones Rápidas</h2>
+      <div class="space-y-3">
+        <a routerLink="/reservations/new" mat-raised-button class="btn-primary w-full flex items-center justify-center gap-2">
+          <mat-icon>add_circle</mat-icon>
+          Nueva Reserva
+        </a>
+        <a routerLink="/reservations" mat-raised-button class="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700">
+          <mat-icon>list</mat-icon>
+          Ver Reservas
+        </a>
+        <a routerLink="/restaurants" mat-stroked-button class="w-full flex items-center justify-center gap-2">
+          <mat-icon>restaurant</mat-icon>
+          Gestionar Restaurantes
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="text-xl font-bold text-gray-800 mb-6">📅 Reservas de Hoy</h2>
+      <div class="flex items-center justify-center h-32">
+        <div class="text-center">
+          <p class="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{{ reservasHoy }}</p>
+          <p class="text-gray-600 mt-2 font-medium">reservas programadas</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
