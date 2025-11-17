@@ -13,6 +13,56 @@ export class ZonesService {
     this.initializeData();
   }
 
+  private horaStringToMinutes(hora: string): number {
+    const [hours, minutes] = hora.split(':').map(part => parseInt(part, 10));
+    const safeHours = isNaN(hours) ? 0 : hours;
+    const safeMinutes = isNaN(minutes) ? 0 : minutes;
+    return safeHours * 60 + safeMinutes;
+  }
+
+  private minutesToHoraString(totalMinutes: number): string {
+    const minutesInDay = 24 * 60;
+    const normalized = ((totalMinutes % minutesInDay) + minutesInDay) % minutesInDay;
+    const hours = Math.floor(normalized / 60);
+    const minutes = normalized % 60;
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  }
+
+  private expandHorarios(horarios: string[]): string[] {
+    if (!horarios || horarios.length === 0) return [];
+
+    const sanitized = horarios
+      .map(h => (h ?? '').trim())
+      .filter(h => h.length > 0);
+
+    const result: string[] = [];
+
+    for (let i = 0; i < sanitized.length; i++) {
+      const current = sanitized[i];
+      if (!result.includes(current)) {
+        result.push(current);
+      }
+
+      if (i < sanitized.length - 1) {
+        const currentMinutes = this.horaStringToMinutes(current);
+        const nextMinutes = this.horaStringToMinutes(sanitized[i + 1]);
+
+        if (nextMinutes - currentMinutes > 60) {
+          let slot = currentMinutes + 60;
+          while (slot < nextMinutes) {
+            const formatted = this.minutesToHoraString(slot);
+            if (!result.includes(formatted)) {
+              result.push(formatted);
+            }
+            slot += 60;
+          }
+        }
+      }
+    }
+
+    return result;
+  }
+
   private initializeData(): void {
     const existing = this.getAll();
     if (existing.length === 0) {
@@ -92,7 +142,11 @@ export class ZonesService {
   }
 
   getAll(): Zona[] {
-    return this.storage.get<Zona[]>(this.STORAGE_KEY) || [];
+    const zonas = this.storage.get<Zona[]>(this.STORAGE_KEY) || [];
+    return zonas.map(zona => ({
+      ...zona,
+      horariosDisponibles: this.expandHorarios(zona.horariosDisponibles)
+    }));
   }
 
   getActive(): Zona[] {
