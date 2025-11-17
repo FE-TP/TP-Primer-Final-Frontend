@@ -18,7 +18,8 @@ export class RestaurantService {
     if (existing.length === 0) {
       const initialRestaurants: Restaurant[] = [
         { id: uuidv4(), nombre: 'La Terraza', activo: true },
-        { id: uuidv4(), nombre: 'El Jardín', activo: true }
+        { id: uuidv4(), nombre: 'El Jardín', activo: true },
+        { id: uuidv4(), nombre: 'Parrilla Don José', activo: true }
       ];
       this.storage.set(this.STORAGE_KEY, initialRestaurants);
     }

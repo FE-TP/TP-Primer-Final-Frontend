@@ -17,8 +17,9 @@ export class ZonesService {
     const existing = this.getAll();
     if (existing.length === 0) {
       const restaurants = this.storage.get<any[]>('restaurants') || [];
-      if (restaurants.length > 0) {
+      if (restaurants.length >= 3) {
         const initialZonas: Zona[] = [
+          // Restaurante 1: La Terraza
           {
             id: uuidv4(),
             nombre: 'Terraza Exterior',
@@ -31,6 +32,57 @@ export class ZonesService {
             nombre: 'Salón Principal',
             restauranteId: restaurants[0].id,
             horariosDisponibles: ['12:00', '13:00', '14:00', '15:00', '20:00', '21:00', '22:00', '23:00'],
+            activo: true
+          },
+          {
+            id: uuidv4(),
+            nombre: 'Área VIP',
+            restauranteId: restaurants[0].id,
+            horariosDisponibles: ['19:00', '20:00', '21:00', '22:00', '23:00'],
+            activo: true
+          },
+          // Restaurante 2: El Jardín
+          {
+            id: uuidv4(),
+            nombre: 'Jardín de Invierno',
+            restauranteId: restaurants[1].id,
+            horariosDisponibles: ['11:00', '12:00', '13:00', '14:00', '19:00', '20:00', '21:00'],
+            activo: true
+          },
+          {
+            id: uuidv4(),
+            nombre: 'Patio Central',
+            restauranteId: restaurants[1].id,
+            horariosDisponibles: ['12:00', '13:00', '14:00', '15:00', '20:00', '21:00', '22:00'],
+            activo: true
+          },
+          {
+            id: uuidv4(),
+            nombre: 'Salón Privado',
+            restauranteId: restaurants[1].id,
+            horariosDisponibles: ['13:00', '14:00', '20:00', '21:00', '22:00'],
+            activo: true
+          },
+          // Restaurante 3: Parrilla Don José
+          {
+            id: uuidv4(),
+            nombre: 'Salón de Parrilla',
+            restauranteId: restaurants[2].id,
+            horariosDisponibles: ['12:00', '13:00', '14:00', '15:00', '20:00', '21:00', '22:00', '23:00'],
+            activo: true
+          },
+          {
+            id: uuidv4(),
+            nombre: 'Terraza Techada',
+            restauranteId: restaurants[2].id,
+            horariosDisponibles: ['12:00', '13:00', '14:00', '20:00', '21:00', '22:00'],
+            activo: true
+          },
+          {
+            id: uuidv4(),
+            nombre: 'Bar y Lounge',
+            restauranteId: restaurants[2].id,
+            horariosDisponibles: ['18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'],
             activo: true
           }
         ];

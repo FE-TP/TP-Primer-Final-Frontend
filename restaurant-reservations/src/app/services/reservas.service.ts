@@ -20,7 +20,84 @@ export class ReservasService {
   constructor(
     private storage: StorageService,
     private mesasService: MesasService
-  ) {}
+  ) {
+    this.initializeData();
+  }
+
+  private initializeData(): void {
+    const existing = this.getAll();
+    if (existing.length === 0) {
+      const mesas = this.storage.get<any[]>('mesas') || [];
+      const zonas = this.storage.get<any[]>('zonas') || [];
+      const restaurants = this.storage.get<any[]>('restaurants') || [];
+      
+      if (mesas.length >= 3 && zonas.length >= 3 && restaurants.length >= 3) {
+        // Obtener fechas para las reservas de prueba
+        const hoy = new Date();
+        const manana = new Date(hoy);
+        manana.setDate(manana.getDate() + 1);
+        const pasadoManana = new Date(hoy);
+        pasadoManana.setDate(pasadoManana.getDate() + 2);
+        
+        const formatDate = (date: Date): string => {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+        };
+
+        const initialReservas: Reserva[] = [
+          // Reserva 1 - La Terraza - Terraza Exterior
+          {
+            id: uuidv4(),
+            fecha: formatDate(hoy),
+            hora: '20:00',
+            horaFin: '22:00',
+            cantidadPersonas: 4,
+            mesaId: mesas[1]?.id || mesas[0].id, // Mesa T2 (capacidad 4)
+            nombreCliente: 'Juan',
+            apellidoCliente: 'Pérez',
+            telefono: '0981234567',
+            restauranteId: restaurants[0].id,
+            zonaId: zonas[0].id,
+            status: 'CONFIRMADA'
+          },
+          // Reserva 2 - El Jardín - Jardín de Invierno
+          {
+            id: uuidv4(),
+            fecha: formatDate(manana),
+            hora: '13:00',
+            horaFin: '15:00',
+            cantidadPersonas: 2,
+            mesaId: mesas[9]?.id || mesas[0].id, // Mesa J1 (capacidad 2)
+            nombreCliente: 'María',
+            apellidoCliente: 'González',
+            telefono: '0982345678',
+            restauranteId: restaurants[1].id,
+            zonaId: zonas[3].id,
+            status: 'CONFIRMADA'
+          },
+          // Reserva 3 - Parrilla Don José - Salón de Parrilla
+          {
+            id: uuidv4(),
+            fecha: formatDate(pasadoManana),
+            hora: '21:00',
+            horaFin: '23:00',
+            cantidadPersonas: 6,
+            mesaId: mesas[19]?.id || mesas[0].id, // Mesa PA2 (capacidad 6)
+            nombreCliente: 'Carlos',
+            apellidoCliente: 'Rodríguez',
+            telefono: '0983456789',
+            restauranteId: restaurants[2].id,
+            zonaId: zonas[6].id,
+            status: 'CONFIRMADA'
+          }
+        ];
+        
+        this.storage.set(this.STORAGE_KEY, initialReservas);
+      }
+    }
+  }
 
   private parseHoraToMinutes(hora: string): number {
     const [hours, minutes] = hora.split(':').map(part => parseInt(part, 10));
