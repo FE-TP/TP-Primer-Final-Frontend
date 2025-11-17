@@ -8,13 +8,13 @@
 - Vargas Florentín, Lucas Jesús Elias
 
 ## Puesta en marcha
-`bash
+```bash
 cd restaurant-reservations
-`
-`bash
+```
+```bash
 docker compose up --build -d
-`
-`bash
+```
+```bash
 docker compose stop
-`
+```
 
