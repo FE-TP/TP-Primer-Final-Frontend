@@ -1,3 +1,5 @@
+# Prompt Inicial para Desarrollo con Copilot
+
 Genera un sistema completo de reservas de mesas para restaurantes en Angular 18, siguiendo los siguientes requisitos:
 
 - Usar Angular, TypeScript, Tailwind CSS y Angular Material.
@@ -41,7 +43,7 @@ Pantalla única de reservas (sin wizard)
 
 La pantalla de reservas debe contener todo el flujo en una única vista intuitiva y dinámica.
 
-📋 Modelo de datos del sistema (interfaces)
+## Modelo de datos del sistema (interfaces)
 Restaurant
 export interface Restaurant {
   id: string;
@@ -85,8 +87,8 @@ export interface Reserva {
   status: ReservaStatus;
 }
 
-🧠 Reglas de negocio (actualizadas con flujo en una sola pantalla)
-✔️ 1. Validaciones de disponibilidad
+## Reglas de negocio (actualizadas con flujo en una sola pantalla)
+### 1. Validaciones de disponibilidad
 
 La pantalla de reserva debe validar en tiempo real:
 
@@ -120,9 +122,9 @@ function findAvailableTable(zonaId, fecha, hora, cantidad) {
 
 
 Si no hay disponibilidad → mostrar alerta roja:
-“No hay mesas disponibles para esta combinación de fecha/hora/personas.”
+"No hay mesas disponibles para esta combinación de fecha/hora/personas."
 
-✔️ 2. Validación de cantidad de personas
+### 2. Validación de cantidad de personas
 
 No permitir números menores a 1.
 
@@ -130,11 +132,11 @@ No permitir números mayores a la capacidad máxima de la zona.
 
 Mostrar advertencia si excede.
 
-✔️ 3. Reglas de eliminación (CRUD)
+### 3. Reglas de eliminación (CRUD)
 
 Las reglas de negocio generales no cambian:
 
-❌ No se puede eliminar:
+No se puede eliminar:
 
 Un restaurante con zonas/mesas que tengan reservas activas.
 
@@ -142,7 +144,7 @@ Una zona con mesas que tengan reservas activas.
 
 Una mesa con reservas activas.
 
-✔️ Sí se puede eliminar:
+Sí se puede eliminar:
 
 Si no tiene reservas activas → soft-delete (activo=false)
 
@@ -154,7 +156,7 @@ Cancelar reservas afectadas
 
 Cancelar operación
 
-✔️ 4. Reglas para crear reserva en una sola pantalla
+### 4. Reglas para crear reserva en una sola pantalla
 
 Debe confirmarse solo cuando:
 
@@ -172,17 +174,17 @@ Datos personales completos
 
 Existe una mesa disponible
 
-🧩 Pantalla Única de Reserva (detallado para UI)
+## Pantalla Única de Reserva (detallado para UI)
 
 La pantalla debe contener secciones dinámicas:
 
-⭐ Sección 1: Selección de Restaurante
+### Sección 1: Selección de Restaurante
 
 Select Angular Material
 
 Mostrar solo restaurantes activos
 
-⭐ Sección 2: Selección de Zona
+### Sección 2: Selección de Zona
 
 Select filtrado por restaurante
 
@@ -190,19 +192,19 @@ Mostrar solo zonas activas
 
 Mostrar horarios disponibles (chips o badges)
 
-⭐ Sección 3: Selección de Fecha
+### Sección 3: Selección de Fecha
 
 Datepicker Material
 
 Deshabilitar fechas pasadas
 
-⭐ Sección 4: Selección de Hora
+### Sección 4: Selección de Hora
 
 Mostrar horarios de la zona seleccionada
 
 Deshabilitar horarios pasados si fecha es hoy
 
-⭐ Sección 5: Cantidad de Personas
+### Sección 5: Cantidad de Personas
 
 Input number con botones +/−
 
@@ -210,7 +212,7 @@ Validar capacidad máxima
 
 Mostrar capacidad máxima disponible bajo el input
 
-⭐ Sección 6: Datos del Cliente
+### Sección 6: Datos del Cliente
 
 Nombre
 
@@ -220,7 +222,7 @@ Teléfono
 
 Campos Material con validación
 
-⭐ Sección 7: Resumen + Asignación de Mesa
+### Sección 7: Resumen + Asignación de Mesa
 
 Mostrar todos los datos seleccionados
 
@@ -233,7 +235,7 @@ Mesa #12 (capacidad: 4 personas)
 
 Si no hay disponibilidad → mensaje rojo.
 
-⭐ Sección 8: Confirmar Reserva
+### Sección 8: Confirmar Reserva
 
 Botón deshabilitado hasta que haya mesa asignada
 
@@ -244,17 +246,17 @@ Guardar reserva en LocalStorage
 Mostrar snackbar verde:
 "Reserva confirmada. Mesa asignada: X"
 
-🖥️ Pantallas adicionales del sistema
+## Pantallas adicionales del sistema
 
 Generar (para Angular y Figma):
 
-🔹 Dashboard
+### Dashboard
 
 Estadísticas
 
 Gráficos (reservas por día/restaurante/ocupación)
 
-🔹 CRUD Restaurantes
+### CRUD Restaurantes
 
 Lista
 
@@ -262,7 +264,7 @@ Form
 
 Modal de eliminación segura
 
-🔹 CRUD Zonas
+### CRUD Zonas
 
 Lista por restaurante
 
@@ -272,7 +274,7 @@ Gestión de horarios (chips)
 
 Eliminación segura
 
-🔹 CRUD Mesas
+### CRUD Mesas
 
 Lista por zona
 
@@ -280,7 +282,7 @@ Form
 
 Eliminación con reasignación o cancelación
 
-🔹 Lista de Reservas
+### Lista de Reservas
 
 Tabla Material con filtros por:
 
@@ -300,7 +302,7 @@ completar
 
 ver detalles
 
-📦 Servicios Angular Obligatorios
+## Servicios Angular Obligatorios
 RestaurantService
 
 CRUD + soft-delete
@@ -341,14 +343,14 @@ StorageService
 
 Wrapper de LocalStorage
 
-🗂️ Estructura de carpetas sugerida
+## Estructura de carpetas sugerida
 /features
   /reservations
     - reservation-page.component.ts
     - reservation-page.component.html
     - reservation-page.component.css
 
-🎨 Estilo Visual Angular + Tailwind
+## Estilo Visual Angular + Tailwind
 
 Layout tipo dashboard
 
