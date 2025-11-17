@@ -1,11 +1,11 @@
 # Sistema de Reservas de Mesas
 
 ## Integrantes del Equipo
-- Fleitas C�ceres, Fernando David
+- Fleitas Cáceres, Fernando David
 - Figueredo Rosa, Elias Jesus
-- Paredes P�rez, Atilio Sebasti�n
-- Ram�rez Dure, Jos� Gabriel
-- Vargas Florent�n, Lucas Jes�s Elias
+- Paredes Pérez, Atilio Sebastián
+- Ramírez Dure, José Gabriel
+- Vargas Florentín, Lucas Jesús Elias
 
 ## Puesta en marcha
 `bash
