@@ -7,11 +7,12 @@
   --font-size: 16px;
   --background: #ffffff;
   --foreground: #1a1a1a;
-  --primary: #030213;
+  --primary: #4f46e5;
+  --primary-dark: #4338ca;
   --primary-foreground: #ffffff;
-  --secondary: #f5f5f7;
+  --secondary: #f8fafc;
   --secondary-foreground: #030213;
-  --destructive: #d4183d;
+  --destructive: #ef4444;
   --destructive-foreground: #ffffff;
   --success: #10b981;
   --success-foreground: #ffffff;
@@ -19,8 +20,12 @@
   --warning-foreground: #ffffff;
   --info: #3b82f6;
   --info-foreground: #ffffff;
-  --border: rgba(0, 0, 0, 0.1);
-  --radius: 0.625rem;
+  --border: rgba(0, 0, 0, 0.08);
+  --radius: 0.75rem;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 html, body { 
@@ -76,16 +81,38 @@ body {
   background-color: var(--background);
   border-radius: var(--radius);
   border: 1px solid var(--border);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
 .btn-primary {
-  background-color: var(--primary);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: var(--primary-foreground);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 .btn-destructive {
   background-color: var(--destructive);
   color: var(--destructive-foreground);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.btn-destructive:hover:not(:disabled) {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 /* Badge styles */
@@ -93,23 +120,41 @@ body {
 .badge-error,
 .badge-warning,
 .badge-info {
-  @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold;
+  @apply inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
 .badge-success {
-  @apply bg-green-100 text-green-800;
+  @apply bg-gradient-to-r from-green-50 to-emerald-100 text-green-800 border border-green-200;
+}
+
+.badge-success:hover {
+  @apply shadow-md transform scale-105;
 }
 
 .badge-error {
-  @apply bg-red-100 text-red-800;
+  @apply bg-gradient-to-r from-red-50 to-rose-100 text-red-800 border border-red-200;
+}
+
+.badge-error:hover {
+  @apply shadow-md transform scale-105;
 }
 
 .badge-warning {
-  @apply bg-orange-100 text-orange-800;
+  @apply bg-gradient-to-r from-orange-50 to-amber-100 text-orange-800 border border-orange-200;
+}
+
+.badge-warning:hover {
+  @apply shadow-md transform scale-105;
 }
 
 .badge-info {
-  @apply bg-blue-100 text-blue-800;
+  @apply bg-gradient-to-r from-blue-50 to-indigo-100 text-blue-800 border border-blue-200;
+}
+
+.badge-info:hover {
+  @apply shadow-md transform scale-105;
 }
 
 /* Icon sizes */
@@ -119,44 +164,68 @@ body {
 
 /* Action buttons */
 .action-btn {
-  @apply transition-all duration-200 !w-9 !h-9;
+  @apply transition-all duration-200 !w-9 !h-9 rounded-lg;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .action-btn-edit {
-  @apply text-blue-600 hover:bg-blue-50 hover:text-blue-700;
+  @apply text-blue-600 hover:bg-gradient-to-br hover:from-blue-50 hover:to-blue-100 hover:text-blue-700;
 }
 
 .action-btn-disable {
-  @apply text-orange-600 hover:bg-orange-50 hover:text-orange-700;
+  @apply text-orange-600 hover:bg-gradient-to-br hover:from-orange-50 hover:to-orange-100 hover:text-orange-700;
 }
 
 .action-btn-enable {
-  @apply text-green-600 hover:bg-green-50 hover:text-green-700;
+  @apply text-green-600 hover:bg-gradient-to-br hover:from-green-50 hover:to-green-100 hover:text-green-700;
 }
 
 .action-btn mat-icon {
   @apply !text-xl !w-5 !h-5;
+  transition: transform 0.2s ease;
+}
+
+.action-btn:hover mat-icon {
+  transform: scale(1.1);
 }
 
 /* Material Table improvements */
 .mat-mdc-table {
   @apply bg-transparent;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .mat-mdc-header-row {
-  @apply bg-gray-50;
+  @apply bg-gradient-to-r from-gray-50 to-slate-100;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .mat-mdc-header-cell {
-  @apply !text-sm !font-semibold !text-gray-700 !py-4;
+  @apply !text-sm !font-bold !text-gray-700 !py-4 !px-4;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  font-size: 0.75rem !important;
 }
 
 .mat-mdc-cell {
-  @apply !py-4 !align-middle;
+  @apply !py-4 !px-4 !align-middle;
+}
+
+.mat-mdc-row {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
 .mat-mdc-row:hover {
-  @apply bg-gray-50;
+  @apply bg-gradient-to-r from-blue-50/50 to-indigo-50/50;
+  transform: scale(1.001);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 /* Material Chips */
@@ -193,4 +262,340 @@ mat-chip {
 
 .chip-unselected {
   @apply bg-gray-100 text-gray-700 border-2 border-transparent hover:bg-gray-200;
+}
+
+/* Animaciones y utilidades adicionales */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.4s ease-out;
+}
+
+/* Gradient text utility */
+.gradient-text {
+  @apply bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent;
+}
+
+/* Stats card enhancement */
+.stat-card {
+  @apply card;
+  background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(249,250,251,0.95) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.stat-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Icon containers */
+.icon-container {
+  @apply flex items-center justify-center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.icon-container:hover {
+  transform: rotate(5deg) scale(1.1);
+}
+
+/* Page header improvements */
+.page-header {
+  @apply mb-8 pb-6;
+  border-bottom: 2px solid;
+  border-image: linear-gradient(to right, #4f46e5, #7c3aed, transparent) 1;
+}
+
+.page-title {
+  @apply text-3xl font-bold mb-2;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Empty state improvements */
+.empty-state {
+  @apply text-center py-16;
+}
+
+.empty-state mat-icon {
+  @apply mb-4;
+  font-size: 5rem !important;
+  width: 5rem !important;
+  height: 5rem !important;
+  opacity: 0.3;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.empty-state p {
+  @apply text-gray-500 text-lg mb-6;
+}
+
+/* ============================================
+   FORMULARIOS - DISEÑO LIMPIO CON UN SOLO BORDE
+   ============================================ */
+
+/* RESETEAR TODO - Eliminar todos los bordes de Material */
+.mat-mdc-form-field *,
+.mat-mdc-text-field-wrapper *,
+.mdc-text-field *,
+.mdc-notched-outline *,
+label,
+input,
+textarea,
+select {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Contenedor principal del formulario */
+.mat-mdc-form-field {
+  width: 100% !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Wrapper - Este es el ÚNICO elemento con borde */
+.mat-mdc-text-field-wrapper {
+  border: 2px solid #d1d5db !important;
+  border-radius: 0.75rem !important;
+  background: #ffffff !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+  padding: 1rem !important;
+  min-height: 56px !important;
+}
+
+/* Contenedor del infix para centrado vertical */
+.mat-mdc-form-field-infix {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+  border: none !important;
+  min-height: auto !important;
+}
+
+/* Hover state */
+.mat-mdc-form-field:hover .mat-mdc-text-field-wrapper {
+  border-color: #a5b4fc !important;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15) !important;
+
+}
+
+/* Focus state */
+.mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
+  border-color: #4f46e5 !important;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1), 0 4px 12px rgba(79, 70, 229, 0.2) !important;
+}
+
+/* Error state */
+.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-text-field-wrapper {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Disabled state */
+.mat-mdc-form-field-disabled .mat-mdc-text-field-wrapper {
+  border-color: #e5e7eb !important;
+  background: #f9fafb !important;
+  opacity: 0.6;
+}
+
+/* ELIMINAR todos los bordes del notched outline */
+.mdc-notched-outline,
+.mdc-notched-outline__leading,
+.mdc-notched-outline__trailing,
+.mdc-notched-outline__notch {
+  border: none !important;
+}
+
+/* Input interno - Sin bordes, solo texto */
+.mat-mdc-input-element {
+  padding: 0 !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  color: #1f2937 !important;
+  background: transparent !important;
+  line-height: 1.5 !important;
+}
+
+.mat-mdc-input-element::placeholder {
+  color: #9ca3af !important;
+  font-weight: 400 !important;
+}
+
+/* Label flotante */
+.mat-mdc-form-field-label,
+.mdc-floating-label {
+  color: #6b7280 !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.mat-focused .mat-mdc-form-field-label,
+.mat-focused .mdc-floating-label {
+  color: #4f46e5 !important;
+}
+
+/* Select */
+.mat-mdc-select-trigger {
+  padding: 0 !important;
+  min-height: auto !important;
+}
+
+.mat-mdc-select-value {
+  color: #1f2937 !important;
+  font-weight: 500 !important;
+}
+
+.mat-mdc-select-arrow {
+  color: #6b7280 !important;
+}
+
+/* Textarea */
+textarea.mat-mdc-input-element {
+  min-height: 80px !important;
+  resize: vertical !important;
+  padding: 0.5rem 0 !important;
+}
+
+/* Hints y errores */
+.mat-mdc-form-field-hint,
+.mat-mdc-form-field-error {
+  font-size: 0.75rem !important;
+  margin-top: 0.25rem !important;
+  font-weight: 500 !important;
+}
+
+.mat-mdc-form-field-error {
+  color: #ef4444 !important;
+}
+
+.mat-mdc-form-field-hint {
+  color: #6b7280 !important;
+}
+
+/* Iconos de prefix/suffix */
+.mat-mdc-form-field-icon-prefix,
+.mat-mdc-form-field-icon-suffix,
+.mat-datepicker-toggle {
+  color: #6b7280 !important;
+  margin: 0 0.5rem !important;
+}
+
+/* Forzar que NO haya bordes en ningún elemento interno */
+.mat-mdc-text-field-wrapper > *,
+.mat-mdc-form-field-flex > *,
+.mat-mdc-form-field-infix > * {
+  border: none !important;
+  outline: none !important;
+}
+
+/* ============================================
+   FIN FORMULARIOS
+   ============================================ */
+
+/* Material card enhancements */
+mat-card {
+  @apply rounded-xl;
+  box-shadow: var(--shadow-sm) !important;
+  transition: all 0.3s ease !important;
+  border: 1px solid var(--border);
+}
+
+mat-card:hover {
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 rounded-full;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
+}
+
+/* Material Dialog improvements */
+.mat-mdc-dialog-container {
+  @apply rounded-2xl;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+}
+
+.mat-mdc-dialog-container .mat-mdc-dialog-surface {
+  @apply rounded-2xl;
+}
+
+.dialog-container {
+  @apply p-6;
+  min-width: 400px;
+}
+
+.mat-mdc-dialog-title {
+  @apply mb-4 pb-4;
+  border-bottom: 2px solid;
+  border-image: linear-gradient(to right, #4f46e5, #7c3aed, transparent) 1;
+}
+
+.mat-mdc-dialog-content {
+  @apply max-h-[70vh] overflow-y-auto;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Eliminar las líneas divisorias del dialog */
+.mdc-dialog__content {
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+.mat-mdc-dialog-actions {
+  @apply mt-6 pt-4;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  padding: 0 !important;
+  min-height: auto !important;
+}
+::before {
+  border: none;
 }

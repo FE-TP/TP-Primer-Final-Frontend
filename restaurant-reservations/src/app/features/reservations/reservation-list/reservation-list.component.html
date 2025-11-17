@@ -1,33 +1,49 @@
-<div class="container mx-auto p-6">
+<div class="container mx-auto p-6 animate-fade-in">
   <div class="card">
     <!-- Header -->
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center gap-4 mb-8 pb-4 border-b-2 border-gray-100">
+      <div class="icon-container bg-gradient-to-br from-orange-400 to-orange-600 !w-14 !h-14">
+        <span class="text-3xl">📅</span>
+      </div>
       <div>
-        <h2 class="text-2xl font-bold text-gray-800">📅 Lista de Reservas</h2>
-        <p class="text-sm text-gray-600 mt-1">Gestión de todas las reservas del sistema</p>
+        <h2 class="text-3xl font-bold text-gray-800">Lista de Reservas</h2>
+        <p class="text-sm text-gray-500 mt-1">Gestión de todas las reservas del sistema</p>
       </div>
     </div>
 
     <!-- Table -->
-    <div class="overflow-x-auto" *ngIf="reservas.length > 0">
+    <div class="overflow-x-auto rounded-xl" *ngIf="reservas.length > 0">
       <table mat-table [dataSource]="reservas" class="w-full">
         <!-- Fecha Column -->
         <ng-container matColumnDef="fecha">
           <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700">Fecha</th>
-          <td mat-cell *matCellDef="let reserva" class="text-gray-800">{{ reserva.fecha }}</td>
+          <td mat-cell *matCellDef="let reserva" class="text-gray-800 font-medium">
+            <div class="flex items-center gap-2">
+              <mat-icon class="icon-sm text-blue-600">calendar_today</mat-icon>
+              {{ reserva.fecha }}
+            </div>
+          </td>
         </ng-container>
 
         <!-- Hora Column -->
         <ng-container matColumnDef="hora">
           <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700">Hora</th>
-          <td mat-cell *matCellDef="let reserva" class="text-gray-800 font-medium">{{ reserva.hora }}</td>
+          <td mat-cell *matCellDef="let reserva" class="text-gray-800 font-bold">
+            <div class="flex items-center gap-2">
+              <mat-icon class="icon-sm text-indigo-600">schedule</mat-icon>
+              {{ reserva.hora }}
+            </div>
+          </td>
         </ng-container>
 
         <!-- Cliente Column -->
         <ng-container matColumnDef="cliente">
           <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700">Cliente</th>
           <td mat-cell *matCellDef="let reserva" class="text-gray-800">
-            {{ reserva.nombreCliente }} {{ reserva.apellidoCliente }}
+            <div class="flex items-center gap-2">
+              <mat-icon class="icon-sm text-purple-600">person</mat-icon>
+              {{ reserva.nombreCliente }} {{ reserva.apellidoCliente }}
+            </div>
           </td>
         </ng-container>
 
@@ -36,6 +52,7 @@
           <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700">Personas</th>
           <td mat-cell *matCellDef="let reserva">
             <span class="badge-info">
+              <mat-icon class="icon-sm">people</mat-icon>
               {{ reserva.cantidadPersonas }} {{ reserva.cantidadPersonas === 1 ? 'persona' : 'personas' }}
             </span>
           </td>
@@ -44,7 +61,12 @@
         <!-- Restaurante Column -->
         <ng-container matColumnDef="restaurante">
           <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700">Restaurante</th>
-          <td mat-cell *matCellDef="let reserva" class="text-gray-600">{{ reserva.restauranteId }}</td>
+          <td mat-cell *matCellDef="let reserva" class="text-gray-600">
+            <div class="flex items-center gap-1">
+              <mat-icon class="icon-sm text-orange-600">restaurant</mat-icon>
+              {{ reserva.restauranteId }}
+            </div>
+          </td>
         </ng-container>
 
         <!-- Status Column -->
@@ -79,7 +101,7 @@
                 class="action-btn action-btn-disable">
                 <mat-icon>cancel</mat-icon>
               </button>
-              <span *ngIf="reserva.status !== 'CONFIRMADA'" class="text-gray-400 text-sm">
+              <span *ngIf="reserva.status !== 'CONFIRMADA'" class="text-gray-400 text-xs font-medium px-2 py-1 bg-gray-100 rounded">
                 {{ reserva.status === 'COMPLETADA' ? '✓ Completada' : '✗ Cancelada' }}
               </span>
             </div>
@@ -87,14 +109,14 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
     </div>
 
     <!-- Empty state -->
-    <div *ngIf="reservas.length === 0" class="text-center py-12">
-      <mat-icon class="text-gray-300 text-6xl mb-4">event_busy</mat-icon>
-      <p class="text-gray-500">No hay reservas registradas</p>
+    <div *ngIf="reservas.length === 0" class="empty-state">
+      <mat-icon class="text-gray-300">event_busy</mat-icon>
+      <p>No hay reservas registradas</p>
     </div>
   </div>
 </div>
