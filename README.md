@@ -1,2 +1,20 @@
-# TP-Primer-Final-Frontend
-Trabajo práctico de reservas de mesas en restaurantes, desarrollado en Angular. Primer Final de materia Programación Web Frontend
+# Sistema de Reservas de Mesas
+
+## Integrantes del Equipo
+- Fleitas Cáceres, Fernando David
+- Figueredo Rosa, Elias Jesus
+- Paredes Pérez, Atilio Sebastián
+- Ramírez Dure, José Gabriel
+- Vargas Florentín, Lucas Jesús Elias
+
+## Puesta en marcha
+```bash
+cd restaurant-reservations
+```
+```bash
+docker compose up --build -d
+```
+```bash
+docker compose stop
+```
+

@@ -1,0 +1,38 @@
+<div class="dialog-container">
+  <h2 mat-dialog-title class="text-xl font-bold text-gray-800 mb-4">
+    {{ isEdit ? '✏️ Editar Restaurante' : '➕ Nuevo Restaurante' }}
+  </h2>
+
+  <mat-dialog-content>
+    <form [formGroup]="form" class="flex flex-col gap-4">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Nombre del Restaurante</mat-label>
+        <input matInput formControlName="nombre" placeholder="Ej: La Casa del Chef">
+        <mat-error *ngIf="form.get('nombre')?.hasError('required')">
+          El nombre es requerido
+        </mat-error>
+        <mat-error *ngIf="form.get('nombre')?.hasError('minlength')">
+          Mínimo 3 caracteres
+        </mat-error>
+      </mat-form-field>
+
+      <mat-checkbox formControlName="activo" color="primary">
+        Restaurante activo
+      </mat-checkbox>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="gap-2">
+    <button mat-button (click)="onCancel()" class="text-gray-600">
+      Cancelar
+    </button>
+    <button
+      mat-raised-button
+      class="btn-primary"
+      (click)="onSubmit()"
+      [disabled]="!form.valid"
+    >
+      {{ isEdit ? 'Actualizar' : 'Crear' }}
+    </button>
+  </mat-dialog-actions>
+</div>

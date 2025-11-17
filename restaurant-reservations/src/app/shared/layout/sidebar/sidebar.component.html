@@ -1,0 +1,20 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <h2 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-1">
+      🍴 Reservas
+    </h2>
+    <p class="text-sm text-gray-500 font-medium">Sistema de Gestión</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a
+      *ngFor="let item of menuItems"
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      class="nav-item group"
+    >
+      <span class="emoji">{{ item.emoji }}</span>
+      <span class="label">{{ item.label }}</span>
+    </a>
+  </nav>
+</aside>

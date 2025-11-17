@@ -1,0 +1,112 @@
+<div class="container mx-auto p-6 animate-fade-in">
+  <!-- Header -->
+  <div class="page-header">
+    <h1 class="page-title">
+      📊 Dashboard
+    </h1>
+    <p class="text-gray-600 mt-2 text-lg">Vista general del sistema de reservas</p>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Total Restaurantes -->
+    <div class="stat-card group">
+      <div class="flex items-center justify-between">
+        <div class="flex-1">
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wide mb-1">Restaurantes</p>
+          <p class="text-4xl font-bold text-gray-900 mt-2 mb-1">{{ totalRestaurants }}</p>
+          <p class="text-xs text-gray-500">Activos en sistema</p>
+        </div>
+        <div class="icon-container bg-gradient-to-br from-blue-400 to-blue-600">
+          <span class="text-3xl filter drop-shadow-md">🍽️</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Zonas -->
+    <div class="stat-card group">
+      <div class="flex items-center justify-between">
+        <div class="flex-1">
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wide mb-1">Zonas</p>
+          <p class="text-4xl font-bold text-gray-900 mt-2 mb-1">{{ totalZonas }}</p>
+          <p class="text-xs text-gray-500">Distribuidas</p>
+        </div>
+        <div class="icon-container bg-gradient-to-br from-green-400 to-emerald-600">
+          <span class="text-3xl filter drop-shadow-md">🗺️</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Mesas -->
+    <div class="stat-card group">
+      <div class="flex items-center justify-between">
+        <div class="flex-1">
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wide mb-1">Mesas</p>
+          <p class="text-4xl font-bold text-gray-900 mt-2 mb-1">{{ totalMesas }}</p>
+          <p class="text-xs text-gray-500">Disponibles</p>
+        </div>
+        <div class="icon-container bg-gradient-to-br from-purple-400 to-purple-600">
+          <span class="text-3xl filter drop-shadow-md">🪑</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reservas Activas -->
+    <div class="stat-card group">
+      <div class="flex items-center justify-between">
+        <div class="flex-1">
+          <p class="text-gray-500 text-xs font-semibold uppercase tracking-wide mb-1">Reservas</p>
+          <p class="text-4xl font-bold text-gray-900 mt-2 mb-1">{{ totalReservas }}</p>
+          <p class="text-xs text-gray-500">En el sistema</p>
+        </div>
+        <div class="icon-container bg-gradient-to-br from-orange-400 to-orange-600">
+          <span class="text-3xl filter drop-shadow-md">📅</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Acciones rápidas y Reservas de hoy -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="card animate-slide-in">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="icon-container bg-gradient-to-br from-indigo-400 to-indigo-600 !w-12 !h-12">
+          <span class="text-2xl">⚡</span>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800">Acciones Rápidas</h2>
+      </div>
+      <div class="space-y-3">
+        <a routerLink="/reservations/new" mat-stroked-button class="w-full flex items-center justify-center gap-2 !h-12 !text-base border-2 hover:bg-gray-50 transition-all">
+          <mat-icon>add_circle</mat-icon>
+          <span class="font-semibold">Nueva Reserva</span>
+        </a>
+        <a routerLink="/reservations" mat-stroked-button class="w-full flex items-center justify-center gap-2 !h-12 !text-base border-2 hover:bg-gray-50 transition-all">
+          <mat-icon>list</mat-icon>
+          <span class="font-semibold">Ver Reservas</span>
+        </a>
+        <a routerLink="/restaurants" mat-stroked-button class="w-full flex items-center justify-center gap-2 !h-12 !text-base border-2 hover:bg-gray-50 transition-all">
+          <mat-icon>restaurant</mat-icon>c
+          <span class="font-semibold">Gestionar Restaurantes</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="card animate-slide-in" style="animation-delay: 0.1s">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="icon-container bg-gradient-to-br from-blue-400 to-blue-600 !w-12 !h-12">
+          <span class="text-2xl">📅</span>
+        </div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800">Reservas de Hoy</h2>
+          <p class="text-sm text-gray-500">Estado actual</p>
+        </div>
+      </div>
+      <div class="flex items-center justify-center h-32 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl">
+        <div class="text-center">
+          <p class="text-6xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">{{ reservasHoy }}</p>
+          <p class="text-gray-600 font-semibold uppercase text-sm tracking-wide">reservas programadas</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

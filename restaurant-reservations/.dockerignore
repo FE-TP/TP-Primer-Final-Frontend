@@ -1,0 +1,11 @@
+node_modules
+dist
+.angular
+.vscode
+.git
+.gitignore
+npm-debug.log
+.DS_Store
+*.md
+.editorconfig
+karma.conf.js
