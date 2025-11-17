@@ -22,6 +22,34 @@ export class ReservasService {
     private mesasService: MesasService
   ) {}
 
+  private parseHoraToMinutes(hora: string): number {
+    const [hours, minutes] = hora.split(':').map(part => parseInt(part, 10));
+    const safeHours = isNaN(hours) ? 0 : hours;
+    const safeMinutes = isNaN(minutes) ? 0 : minutes;
+    return safeHours * 60 + safeMinutes;
+  }
+
+  private formatMinutesToHora(totalMinutes: number): string {
+    const minutesInDay = 24 * 60;
+    const normalized = ((totalMinutes % minutesInDay) + minutesInDay) % minutesInDay;
+    const hours = Math.floor(normalized / 60);
+    const minutes = normalized % 60;
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  }
+
+  private getReservaHoraFin(reserva: Reserva): string {
+    if (reserva.horaFin && reserva.horaFin.trim() !== '') {
+      return reserva.horaFin;
+    }
+    return this.formatMinutesToHora(this.parseHoraToMinutes(reserva.hora) + 60);
+  }
+
+  private hasTimeOverlap(reserva: Reserva, startMinutes: number, endMinutes: number): boolean {
+    const reservaStart = this.parseHoraToMinutes(reserva.hora);
+    const reservaEnd = this.parseHoraToMinutes(this.getReservaHoraFin(reserva));
+    return startMinutes < reservaEnd && endMinutes > reservaStart;
+  }
+
   getAll(): Reserva[] {
     return this.storage.get<Reserva[]>(this.STORAGE_KEY) || [];
   }
@@ -59,7 +87,8 @@ export class ReservasService {
   findAvailableTable(
     zonaId: string,
     fecha: string,
-    hora: string,
+    horaInicio: string,
+    horaFin: string,
     cantidadPersonas: number
   ): Mesa | null {
     // Obtener todas las mesas activas de la zona
@@ -70,19 +99,26 @@ export class ReservasService {
     
     if (mesasValidas.length === 0) return null;
 
-    // Obtener reservas confirmadas para ese horario
+    if (!horaFin) return null;
+
+    const startMinutes = this.parseHoraToMinutes(horaInicio);
+    const endMinutes = this.parseHoraToMinutes(horaFin);
+
+    if (endMinutes <= startMinutes) return null;
+
+    // Obtener reservas confirmadas para esa fecha
     const reservasConfirmadas = this.getAll().filter(
       r => r.fecha === fecha && 
-           r.hora === hora && 
            r.status === 'CONFIRMADA'
     );
 
-    const mesasOcupadas = new Set(
-      reservasConfirmadas.map(r => r.mesaId).filter(id => id !== null)
-    );
-
-    // Filtrar mesas disponibles
-    const mesasDisponibles = mesasValidas.filter(m => !mesasOcupadas.has(m.id));
+    // Filtrar mesas disponibles teniendo en cuenta todo el rango horario
+    const mesasDisponibles = mesasValidas.filter(mesa => {
+      return !reservasConfirmadas.some(reserva => {
+        if (reserva.mesaId !== mesa.id) return false;
+        return this.hasTimeOverlap(reserva, startMinutes, endMinutes);
+      });
+    });
 
     if (mesasDisponibles.length === 0) return null;
 
@@ -93,11 +129,15 @@ export class ReservasService {
   }
 
   create(reserva: Omit<Reserva, 'id' | 'status'>): Reserva | null {
+    if (!reserva.horaFin) return null;
+    if (this.parseHoraToMinutes(reserva.horaFin) <= this.parseHoraToMinutes(reserva.hora)) return null;
+
     // Buscar mesa disponible
     const mesaDisponible = this.findAvailableTable(
       reserva.zonaId,
       reserva.fecha,
       reserva.hora,
+      reserva.horaFin,
       reserva.cantidadPersonas
     );
 
@@ -148,6 +188,7 @@ export class ReservasService {
         reserva.zonaId,
         reserva.fecha,
         reserva.hora,
+        this.getReservaHoraFin(reserva),
         reserva.cantidadPersonas
       );
 

@@ -27,11 +27,14 @@
 
         <!-- Hora Column -->
         <ng-container matColumnDef="hora">
-          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700">Hora</th>
+          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700">Horario</th>
           <td mat-cell *matCellDef="let reserva" class="text-gray-800 font-bold">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-3">
               <mat-icon class="icon-sm text-indigo-600">schedule</mat-icon>
-              {{ reserva.hora }}
+              <div class="leading-tight">
+                <div>{{ reserva.hora }} hs</div>
+                <div class="text-xs font-normal text-gray-500">Sale {{ getHoraSalida(reserva) }} hs</div>
+              </div>
             </div>
           </td>
         </ng-container>
@@ -64,10 +67,40 @@
           <td mat-cell *matCellDef="let reserva" class="text-gray-600">
             <div class="flex items-center gap-1">
               <mat-icon class="icon-sm text-orange-600">restaurant</mat-icon>
-              {{ reserva.restauranteId }}
+              {{ restaurantNames[reserva.restauranteId] || 'Sin datos' }}
             </div>
           </td>
         </ng-container>
+
+        <!-- Zona Column -->
+        <ng-container matColumnDef="zona">
+          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700">Zona</th>
+          <td mat-cell *matCellDef="let reserva" class="text-gray-600">
+            <div class="flex items-center gap-1">
+              <mat-icon class="icon-sm text-teal-600">map</mat-icon>
+              {{ zonaNames[reserva.zonaId] || 'Sin zona' }}
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Mesa Column -->
+        <ng-container matColumnDef="mesa">
+          <th mat-header-cell *matHeaderCellDef class="font-semibold text-gray-700">Mesa</th>
+          <td mat-cell *matCellDef="let reserva" class="text-gray-600">
+            <div class="flex items-center gap-2">
+              <mat-icon class="icon-sm text-amber-600">chair</mat-icon>
+              <ng-container *ngIf="reserva.mesaId && mesaMap[reserva.mesaId]; else mesaNoAsignada">
+                <span class="font-semibold text-gray-800">Mesa {{ mesaMap[reserva.mesaId].numero }}</span>
+                <span class="text-xs text-gray-500">
+                  ({{ mesaMap[reserva.mesaId].capacidad }} {{ mesaMap[reserva.mesaId].capacidad === 1 ? 'persona' : 'personas' }})
+                </span>
+              </ng-container>
+            </div>
+          </td>
+        </ng-container>
+        <ng-template #mesaNoAsignada>
+          <span class="text-gray-400 text-sm">Sin asignar</span>
+        </ng-template>
 
         <!-- Status Column -->
         <ng-container matColumnDef="status">

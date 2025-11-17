@@ -34,22 +34,13 @@
           </mat-error>
         </mat-form-field>
 
-        <div *ngIf="reservationForm.get('zonaId')?.value" class="mt-4">
-          <p class="text-sm text-gray-600 mb-2">Horarios disponibles:</p>
-          <div class="flex flex-wrap gap-2">
-            <span *ngFor="let horario of availableHorarios" 
-                  class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-              {{ horario }}
-            </span>
-          </div>
-        </div>
       </mat-card>
 
       <!-- Sección 3: Fecha y Hora -->
       <mat-card class="p-6" *ngIf="reservationForm.get('zonaId')?.value">
         <h2 class="text-xl font-semibold mb-4 text-gray-800">3. Fecha y Hora</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Fecha</mat-label>
               <input matInput [matDatepicker]="picker" formControlName="fecha" [min]="minDate" (click)="picker.open()">
@@ -70,11 +61,23 @@
               Selecciona una hora
             </mat-error>
           </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full" *ngIf="reservationForm.get('hora')?.value">
+            <mat-label>Hora de salida</mat-label>
+            <mat-select formControlName="horaFin">
+              <mat-option *ngFor="let horario of getHoraSalidaOptions()" [value]="horario">
+                {{ horario }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="reservationForm.get('horaFin')?.hasError('required')">
+              Selecciona la hora de salida
+            </mat-error>
+          </mat-form-field>
         </div>
       </mat-card>
 
       <!-- Sección 4: Cantidad de Personas -->
-      <mat-card class="p-6" *ngIf="reservationForm.get('hora')?.value">
+      <mat-card class="p-6" *ngIf="reservationForm.get('horaFin')?.value">
         <h2 class="text-xl font-semibold mb-4 text-gray-800">4. Cantidad de Personas</h2>
         
         <mat-form-field appearance="outline" class="w-full">
@@ -171,7 +174,7 @@
               <h3 class="font-semibold">No hay mesas disponibles</h3>
             </div>
             <p class="mt-2 text-gray-700">
-              No hay mesas disponibles para esta combinación de fecha/hora/personas.
+              No hay mesas disponibles para esta combinación de fecha y horario/personas.
             </p>
           </div>
         </div>
@@ -195,8 +198,10 @@
             <span class="font-semibold">{{ reservationForm.get('fecha')?.value | date:'dd/MM/yyyy' }}</span>
           </div>
           <div class="flex justify-between">
-            <span class="text-gray-600">Hora:</span>
-            <span class="font-semibold">{{ reservationForm.get('hora')?.value }}</span>
+            <span class="text-gray-600">Horario:</span>
+            <span class="font-semibold">
+              {{ reservationForm.get('hora')?.value }} - {{ reservationForm.get('horaFin')?.value }}
+            </span>
           </div>
           <div class="flex justify-between">
             <span class="text-gray-600">Personas:</span>

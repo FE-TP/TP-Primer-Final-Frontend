@@ -4,6 +4,7 @@ export interface Reserva {
   id: string;
   fecha: string;
   hora: string;
+  horaFin: string;
   cantidadPersonas: number;
   mesaId: string | null;
   nombreCliente: string;

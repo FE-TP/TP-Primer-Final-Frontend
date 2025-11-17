@@ -58,6 +58,7 @@ export class ReservationPageComponent implements OnInit {
       zonaId: ['', Validators.required],
       fecha: ['', Validators.required],
       hora: ['', Validators.required],
+      horaFin: ['', Validators.required],
       cantidadPersonas: [1, [Validators.required, Validators.min(1)]],
       nombreCliente: ['', Validators.required],
       apellidoCliente: ['', Validators.required],
@@ -87,11 +88,18 @@ export class ReservationPageComponent implements OnInit {
 
     // Listener para fecha
     this.reservationForm.get('fecha')?.valueChanges.subscribe(() => {
+      this.reservationForm.patchValue({ hora: '', horaFin: '' });
       this.resetMesaSearch();
     });
 
     // Listener para hora
     this.reservationForm.get('hora')?.valueChanges.subscribe(() => {
+      this.reservationForm.patchValue({ horaFin: '' });
+      this.resetMesaSearch();
+    });
+
+    // Listener para hora de salida
+    this.reservationForm.get('horaFin')?.valueChanges.subscribe(() => {
       this.resetMesaSearch();
     });
 
@@ -105,7 +113,8 @@ export class ReservationPageComponent implements OnInit {
     this.zonas = this.zonesService.getByRestaurant(restauranteId);
     this.reservationForm.patchValue({
       zonaId: '',
-      hora: ''
+      hora: '',
+      horaFin: ''
     });
     this.availableHorarios = [];
     this.maxCapacity = 0;
@@ -145,7 +154,7 @@ export class ReservationPageComponent implements OnInit {
       ]);
       this.reservationForm.get('cantidadPersonas')?.updateValueAndValidity();
     }
-    this.reservationForm.patchValue({ hora: '' });
+    this.reservationForm.patchValue({ hora: '', horaFin: '' });
     this.resetMesaSearch();
   }
 
@@ -168,6 +177,31 @@ export class ReservationPageComponent implements OnInit {
     }
 
     return this.availableHorarios;
+  }
+
+  getHoraSalidaOptions(): string[] {
+    const horaInicio = this.reservationForm.get('hora')?.value;
+    if (!horaInicio) return [];
+
+    return this.availableHorarios.filter(horario => this.compareHoras(horario, horaInicio) > 0);
+  }
+
+  private compareHoras(horaA: string, horaB: string): number {
+    return this.toMinutes(horaA) - this.toMinutes(horaB);
+  }
+
+  private toMinutes(hora: string): number {
+    const [hours, minutes] = hora.split(':').map(part => parseInt(part, 10));
+    const safeHours = isNaN(hours) ? 0 : hours;
+    const safeMinutes = isNaN(minutes) ? 0 : minutes;
+    return safeHours * 60 + safeMinutes;
+  }
+
+  private isHoraRangeValid(): boolean {
+    const horaInicio = this.reservationForm.get('hora')?.value;
+    const horaFin = this.reservationForm.get('horaFin')?.value;
+    if (!horaInicio || !horaFin) return false;
+    return this.toMinutes(horaFin) > this.toMinutes(horaInicio);
   }
 
   incrementPersonas(): void {
@@ -201,12 +235,14 @@ export class ReservationPageComponent implements OnInit {
     const zonaId = this.reservationForm.get('zonaId')?.value;
     const fecha = this.formatDate(this.reservationForm.get('fecha')?.value);
     const hora = this.reservationForm.get('hora')?.value;
+    const horaFin = this.reservationForm.get('horaFin')?.value;
     const cantidadPersonas = this.reservationForm.get('cantidadPersonas')?.value;
 
     this.assignedMesa = this.reservasService.findAvailableTable(
       zonaId,
       fecha,
       hora,
+      horaFin,
       cantidadPersonas
     );
 
@@ -214,7 +250,7 @@ export class ReservationPageComponent implements OnInit {
 
     if (!this.assignedMesa) {
       this.snackBar.open(
-        'No hay mesas disponibles para esta combinación de fecha/hora/personas.',
+        'No hay mesas disponibles para esta combinación de fecha y horario/personas.',
         'Cerrar',
         {
           duration: 5000,
@@ -230,7 +266,9 @@ export class ReservationPageComponent implements OnInit {
       this.reservationForm.get('zonaId')?.value &&
       this.reservationForm.get('fecha')?.value &&
       this.reservationForm.get('hora')?.value &&
-      this.reservationForm.get('cantidadPersonas')?.valid
+      this.reservationForm.get('horaFin')?.value &&
+      this.reservationForm.get('cantidadPersonas')?.valid &&
+      this.isHoraRangeValid()
     );
   }
 
@@ -266,6 +304,7 @@ export class ReservationPageComponent implements OnInit {
       zonaId: formValue.zonaId,
       fecha: this.formatDate(formValue.fecha),
       hora: formValue.hora,
+      horaFin: formValue.horaFin,
       cantidadPersonas: formValue.cantidadPersonas,
       nombreCliente: formValue.nombreCliente,
       apellidoCliente: formValue.apellidoCliente,

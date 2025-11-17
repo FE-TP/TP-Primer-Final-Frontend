@@ -5,8 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Reserva } from '../../../models';
-import { ReservasService } from '../../../services';
+import { Mesa, Reserva } from '../../../models';
+import { MesasService, ReservasService, RestaurantService, ZonesService } from '../../../services';
 
 @Component({
   selector: 'app-reservation-list',
@@ -17,16 +17,42 @@ import { ReservasService } from '../../../services';
 })
 export class ReservationListComponent implements OnInit {
   reservas: Reserva[] = [];
-  displayedColumns: string[] = ['fecha', 'hora', 'cliente', 'personas', 'restaurante', 'status', 'actions'];
+  displayedColumns: string[] = ['fecha', 'hora', 'cliente', 'personas', 'restaurante', 'zona', 'mesa', 'status', 'actions'];
+  restaurantNames: Record<string, string> = {};
+  zonaNames: Record<string, string> = {};
+  mesaMap: Record<string, Mesa> = {};
 
-  constructor(private reservasService: ReservasService) {}
+  constructor(
+    private reservasService: ReservasService,
+    private restaurantService: RestaurantService,
+    private zonesService: ZonesService,
+    private mesasService: MesasService
+  ) {}
 
   ngOnInit(): void {
     this.loadReservas();
   }
 
   loadReservas(): void {
+    this.loadReferenceData();
     this.reservas = this.reservasService.getAll();
+  }
+
+  private loadReferenceData(): void {
+    this.restaurantNames = this.restaurantService.getAll().reduce((acc, restaurant) => {
+      acc[restaurant.id] = restaurant.nombre;
+      return acc;
+    }, {} as Record<string, string>);
+
+    this.zonaNames = this.zonesService.getAll().reduce((acc, zona) => {
+      acc[zona.id] = zona.nombre;
+      return acc;
+    }, {} as Record<string, string>);
+
+    this.mesaMap = this.mesasService.getAll().reduce((acc, mesa) => {
+      acc[mesa.id] = mesa;
+      return acc;
+    }, {} as Record<string, Mesa>);
   }
 
   getStatusClass(status: string): string {
@@ -45,6 +71,25 @@ export class ReservationListComponent implements OnInit {
       case 'COMPLETADA': return 'check_circle';
       default: return 'help_outline';
     }
+  }
+
+  getHoraSalida(reserva: Reserva): string {
+    if (reserva.horaFin && reserva.horaFin.trim() !== '') {
+      return reserva.horaFin;
+    }
+    return this.addMinutesToHora(reserva.hora, 60);
+  }
+
+  private addMinutesToHora(hora: string, minutes: number): string {
+    const [hours, mins] = hora.split(':').map(part => parseInt(part, 10));
+    const safeHours = isNaN(hours) ? 0 : hours;
+    const safeMinutes = isNaN(mins) ? 0 : mins;
+    const totalMinutes = safeHours * 60 + safeMinutes + minutes;
+    const minutesInDay = 24 * 60;
+    const normalized = ((totalMinutes % minutesInDay) + minutesInDay) % minutesInDay;
+    const resultHours = Math.floor(normalized / 60);
+    const resultMinutes = normalized % 60;
+    return `${String(resultHours).padStart(2, '0')}:${String(resultMinutes).padStart(2, '0')}`;
   }
 
   cancelReservation(id: string): void {
