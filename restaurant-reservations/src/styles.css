@@ -380,7 +380,8 @@ select {
 /* Contenedor principal del formulario */
 .mat-mdc-form-field {
   width: 100% !important;
-  margin-bottom: 1rem !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0 !important;
 }
 
 /* Wrapper - Este es el ÚNICO elemento con borde */
@@ -391,7 +392,12 @@ select {
   transition: all 0.3s ease !important;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
   padding: 1rem !important;
-  min-height: 56px !important;
+  min-height: 54px !important;
+}
+/* Cuadraditos de número de personas*/
+.mat-mdc-button-touch-target {
+  padding: 0 !important;
+  height: 100%;
 }
 
 /* Contenedor del infix para centrado vertical */
@@ -467,6 +473,11 @@ select {
   color: #4f46e5 !important;
 }
 
+/* Label flotante cuando está arriba (focused o con valor) */
+.mdc-floating-label--float-above {
+  transform: translateY(-300%) scale(0.85) !important;
+}
+
 /* Select */
 .mat-mdc-select-trigger {
   padding: 0 !important;
@@ -476,6 +487,7 @@ select {
 .mat-mdc-select-value {
   color: #1f2937 !important;
   font-weight: 500 !important;
+  
 }
 
 .mat-mdc-select-arrow {
@@ -511,6 +523,44 @@ textarea.mat-mdc-input-element {
 .mat-datepicker-toggle {
   color: #6b7280 !important;
   margin: 0 0.5rem !important;
+}
+
+.mat-display-medium, .mat-typography .mat-display-medium, .mat-typography h2 {
+  margin: 0 !important;
+}
+
+/* Botones de cantidad de personas */
+.personas-btn {
+  color: #4f46e5 !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+}
+
+.personas-btn .mat-icon {
+  font-size: 1rem !important;
+  width: 1rem !important;
+  height: 1rem !important;
+}
+
+.personas-btn:disabled {
+  color: #9ca3af !important;
+}
+
+/* Centrar el input numérico de personas */
+input[type="number"].text-center {
+  text-align: center !important;
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+  -moz-appearance: textfield !important;
+}
+
+/* Ocultar las flechas de incremento/decremento en Chrome, Safari, Edge */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
 }
 
 /* Forzar que NO haya bordes en ningún elemento interno */

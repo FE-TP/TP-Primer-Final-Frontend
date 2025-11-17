@@ -36,8 +36,9 @@ export class ZoneFormDialogComponent implements OnInit {
   form: FormGroup;
   isEdit: boolean;
   restaurants: Restaurant[] = [];
-  availableHorarios = ['Almuerzo', 'Cena', 'Todo el día', 'Desayuno', 'Brunch'];
-  selectedHorarios: string[] = [];
+  horas: number[] = Array.from({ length: 24 }, (_, i) => i); // 0 a 23
+  horasHasta: number[] = [];
+  generatedHorarios: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -50,6 +51,8 @@ export class ZoneFormDialogComponent implements OnInit {
     this.form = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
       restauranteId: ['', Validators.required],
+      horaDesde: ['', Validators.required],
+      horaHasta: ['', Validators.required],
       activa: [true]
     });
   }
@@ -63,39 +66,73 @@ export class ZoneFormDialogComponent implements OnInit {
         restauranteId: this.data.restauranteId,
         activa: this.data.activo
       });
-      this.selectedHorarios = [...this.data.horariosDisponibles];
+      
+      // Intentar parsear los horarios existentes para extraer desde/hasta
+      if (this.data.horariosDisponibles.length > 0) {
+        const firstHorario = this.data.horariosDisponibles[0];
+        const lastHorario = this.data.horariosDisponibles[this.data.horariosDisponibles.length - 1];
+        
+        // Extraer hora de inicio del primer horario (ej: "12:00" -> 12)
+        const horaDesde = parseInt(firstHorario.split(':')[0]);
+        // Extraer hora de fin del último horario (ej: "22:00" -> 22)
+        const horaHasta = parseInt(lastHorario.split(':')[0]);
+        
+        this.form.patchValue({
+          horaDesde: horaDesde,
+          horaHasta: horaHasta
+        });
+        
+        this.updateHorasHasta();
+        this.generateHorarios();
+      }
     }
   }
 
-  toggleHorario(horario: string): void {
-    const index = this.selectedHorarios.indexOf(horario);
-    if (index >= 0) {
-      this.selectedHorarios.splice(index, 1);
+  onHorarioChange(): void {
+    this.updateHorasHasta();
+    this.generateHorarios();
+  }
+
+  updateHorasHasta(): void {
+    const horaDesde = this.form.get('horaDesde')?.value;
+    if (horaDesde !== null && horaDesde !== '') {
+      // Horas disponibles desde horaDesde + 1 hasta 23
+      this.horasHasta = Array.from({ length: 24 - horaDesde - 1 }, (_, i) => horaDesde + 1 + i);
     } else {
-      this.selectedHorarios.push(horario);
+      this.horasHasta = [];
     }
   }
 
-  isHorarioSelected(horario: string): boolean {
-    return this.selectedHorarios.includes(horario);
+  generateHorarios(): void {
+    const horaDesde = this.form.get('horaDesde')?.value;
+    const horaHasta = this.form.get('horaHasta')?.value;
+    
+    this.generatedHorarios = [];
+    
+    if (horaDesde !== null && horaDesde !== '' && horaHasta !== null && horaHasta !== '' && horaDesde < horaHasta) {
+      for (let i = horaDesde; i <= horaHasta; i++) {
+        const hora = i.toString().padStart(2, '0');
+        this.generatedHorarios.push(`${hora}:00`);
+      }
+    }
   }
 
   onSubmit(): void {
-    if (this.form.valid && this.selectedHorarios.length > 0) {
+    if (this.form.valid && this.generatedHorarios.length > 0) {
       const formValue = this.form.value;
       
       if (this.isEdit && this.data) {
         this.zonesService.update(this.data.id, {
           nombre: formValue.nombre,
           restauranteId: formValue.restauranteId,
-          horariosDisponibles: this.selectedHorarios,
+          horariosDisponibles: this.generatedHorarios,
           activo: formValue.activa
         });
       } else {
         this.zonesService.create({
           nombre: formValue.nombre,
           restauranteId: formValue.restauranteId,
-          horariosDisponibles: this.selectedHorarios,
+          horariosDisponibles: this.generatedHorarios,
           activo: formValue.activa
         });
       }

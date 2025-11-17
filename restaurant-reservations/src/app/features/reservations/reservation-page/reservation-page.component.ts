@@ -115,6 +115,25 @@ export class ReservationPageComponent implements OnInit {
   onZonaChange(zonaId: string): void {
     const zona = this.zonesService.getById(zonaId);
     if (zona) {
+      // Verificar si la zona tiene mesas activas
+      const mesasEnZona = this.mesasService.getByZona(zonaId).filter(m => m.activo);
+      
+      if (mesasEnZona.length === 0) {
+        this.snackBar.open(
+          'Esta zona no tiene mesas disponibles. Por favor selecciona otra zona.',
+          'Cerrar',
+          {
+            duration: 5000,
+            panelClass: ['error-snackbar']
+          }
+        );
+        this.reservationForm.patchValue({ zonaId: '' });
+        this.availableHorarios = [];
+        this.maxCapacity = 0;
+        this.resetMesaSearch();
+        return;
+      }
+      
       this.availableHorarios = zona.horariosDisponibles;
       this.maxCapacity = this.mesasService.getMaxCapacityByZona(zonaId);
       
@@ -229,7 +248,17 @@ export class ReservationPageComponent implements OnInit {
   }
 
   confirmReservation(): void {
-    if (!this.canConfirmReservation()) return;
+    if (!this.canConfirmReservation() || !this.assignedMesa) {
+      this.snackBar.open(
+        'No se puede confirmar la reserva sin una mesa asignada.',
+        'Cerrar',
+        {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        }
+      );
+      return;
+    }
 
     const formValue = this.reservationForm.value;
     const reserva = this.reservasService.create({
@@ -241,12 +270,12 @@ export class ReservationPageComponent implements OnInit {
       nombreCliente: formValue.nombreCliente,
       apellidoCliente: formValue.apellidoCliente,
       telefono: formValue.telefono,
-      mesaId: this.assignedMesa!.id
+      mesaId: this.assignedMesa.id
     });
 
     if (reserva) {
       this.snackBar.open(
-        `Reserva confirmada. Mesa asignada: ${this.assignedMesa!.numero}`,
+        `Reserva confirmada. Mesa asignada: ${this.assignedMesa.numero}`,
         'Cerrar',
         {
           duration: 5000,

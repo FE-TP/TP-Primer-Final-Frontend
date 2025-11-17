@@ -52,8 +52,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Fecha</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="fecha" [min]="minDate">
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker" formControlName="fecha" [min]="minDate" (click)="picker.open()">
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngIf="reservationForm.get('fecha')?.hasError('required')">
               Selecciona una fecha
@@ -78,25 +77,24 @@
       <mat-card class="p-6" *ngIf="reservationForm.get('hora')?.value">
         <h2 class="text-xl font-semibold mb-4 text-gray-800">4. Cantidad de Personas</h2>
         
-        <div class="flex items-center gap-4">
-          <button mat-mini-fab color="primary" type="button" 
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Personas</mat-label>
+          <button mat-icon-button matPrefix type="button" 
+                  class="personas-btn"
                   (click)="decrementPersonas()"
                   [disabled]="(reservationForm.get('cantidadPersonas')?.value || 0) <= 1">
             <mat-icon>remove</mat-icon>
           </button>
-          
-          <mat-form-field appearance="outline" class="w-32">
-            <mat-label>Personas</mat-label>
-            <input matInput type="number" formControlName="cantidadPersonas" 
-                   min="1" [max]="maxCapacity">
-          </mat-form-field>
-          
-          <button mat-mini-fab color="primary" type="button" 
+          <input matInput type="number" formControlName="cantidadPersonas" 
+                 class="text-center"
+                 min="1" [max]="maxCapacity">
+          <button mat-icon-button matSuffix type="button" 
+                  class="personas-btn"
                   (click)="incrementPersonas()"
                   [disabled]="(reservationForm.get('cantidadPersonas')?.value || 0) >= maxCapacity">
             <mat-icon>add</mat-icon>
           </button>
-        </div>
+        </mat-form-field>
 
         <p class="text-sm text-gray-600 mt-2">
           Capacidad máxima disponible: {{ maxCapacity }} personas
